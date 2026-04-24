@@ -1,0 +1,761 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Doug — SAP Business Transformation Practice Builder</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #f8f6f1;
+    --navy-mid: #eeeae2;
+    --navy-light: #e2ddd5;
+    --gold: #1a3a5c;
+    --gold-light: #2a5280;
+    --gold-dim: rgba(26,58,92,0.08);
+    --cream: #0d1f33;
+    --cream-dim: rgba(13,31,51,0.04);
+    --white: #0d1f33;
+    --muted: #5a6a7a;
+    --divider: rgba(26,58,92,0.15);
+    --serif: 'Playfair Display', Georgia, serif;
+    --sans: 'DM Sans', system-ui, sans-serif;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--navy);
+    color: var(--cream);
+    font-family: var(--sans);
+    font-weight: 300;
+    line-height: 1.75;
+    overflow-x: hidden;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 1.25rem 3rem;
+    background: rgba(248,246,241,0.92);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--divider);
+  }
+  .nav-logo {
+    font-family: var(--serif);
+    font-size: 1.1rem;
+    letter-spacing: 0.04em;
+    color: var(--gold);
+  }
+  .nav-links { display: flex; gap: 2.5rem; list-style: none; }
+  .nav-links a {
+    font-size: 0.8rem;
+    font-weight: 400;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--gold); }
+
+  /* ── HERO ── */
+  .hero {
+    min-height: 100vh;
+    display: flex; align-items: center;
+    padding: 7rem 3rem 5rem;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero-bg {
+    position: absolute; inset: 0;
+    background:
+      radial-gradient(ellipse 60% 80% at 80% 50%, rgba(201,168,76,0.06) 0%, transparent 70%),
+      radial-gradient(ellipse 40% 60% at 20% 80%, rgba(28,49,81,0.6) 0%, transparent 60%);
+  }
+  .hero-rule {
+    position: absolute; top: 0; right: 0; width: 1px; height: 100%;
+    background: linear-gradient(to bottom, transparent, var(--gold), transparent);
+    opacity: 0.3;
+  }
+  .hero-content { position: relative; max-width: 780px; }
+  .hero-eyebrow {
+    display: inline-block;
+    font-size: 0.72rem;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold);
+    border: 1px solid var(--divider);
+    padding: 0.4rem 1rem;
+    margin-bottom: 2rem;
+    border-radius: 2px;
+  }
+  h1 {
+    font-family: var(--serif);
+    font-size: clamp(3.5rem, 7vw, 6.5rem);
+    font-weight: 900;
+    line-height: 0.95;
+    letter-spacing: -0.01em;
+    color: var(--cream);
+    margin-bottom: 0.25rem;
+  }
+  h1 .accent { color: var(--gold); }
+  .hero-title {
+    font-family: var(--serif);
+    font-size: clamp(1rem, 2vw, 1.4rem);
+    font-weight: 400;
+    font-style: italic;
+    color: var(--muted);
+    margin: 1.5rem 0 2.5rem;
+    max-width: 600px;
+    line-height: 1.5;
+  }
+  .hero-stats {
+    display: flex; gap: 3rem; margin-top: 3rem;
+    border-top: 1px solid var(--divider);
+    padding-top: 2rem;
+  }
+  .stat-num {
+    font-family: var(--serif);
+    font-size: 2.4rem;
+    font-weight: 700;
+    color: var(--gold);
+    line-height: 1;
+  }
+  .stat-label {
+    font-size: 0.72rem;
+    font-weight: 400;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-top: 0.35rem;
+  }
+  .hero-cta {
+    display: inline-flex; align-items: center; gap: 0.75rem;
+    margin-top: 2.5rem;
+    padding: 0.85rem 2rem;
+    background: var(--gold);
+    color: var(--navy);
+    font-size: 0.8rem;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    text-decoration: none;
+    border-radius: 2px;
+    transition: background 0.2s;
+  }
+  .hero-cta:hover { background: var(--gold-light); }
+
+  /* ── SECTIONS ── */
+  section { padding: 6rem 3rem; }
+  .section-inner { max-width: 1060px; margin: 0 auto; }
+  .section-label {
+    font-size: 0.7rem;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 1rem;
+  }
+  h2 {
+    font-family: var(--serif);
+    font-size: clamp(2rem, 3.5vw, 3rem);
+    font-weight: 700;
+    color: var(--cream);
+    line-height: 1.1;
+    margin-bottom: 2.5rem;
+  }
+  .divider-line {
+    width: 48px; height: 2px;
+    background: var(--gold);
+    margin-bottom: 2.5rem;
+  }
+
+  /* ── ABOUT ── */
+  .about-section { background: var(--navy-mid); border-top: 1px solid var(--divider); border-bottom: 1px solid var(--divider); }
+  .about-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: start;
+  }
+  .about-body p {
+    font-size: 1.05rem;
+    color: var(--cream);
+    margin-bottom: 1.25rem;
+    line-height: 1.8;
+  }
+  .about-body p strong { color: var(--gold-light); font-weight: 500; }
+  .credentials { margin-top: 2rem; }
+  .cred-item {
+    display: flex; align-items: flex-start; gap: 1rem;
+    padding: 1rem 0;
+    border-bottom: 1px solid var(--divider);
+  }
+  .cred-icon {
+    width: 2px; height: 36px;
+    background: var(--gold);
+    flex-shrink: 0;
+    margin-top: 4px;
+  }
+  .cred-title { font-size: 0.95rem; font-weight: 500; color: var(--cream); }
+  .cred-sub { font-size: 0.8rem; color: var(--muted); }
+
+  /* ── EXPERTISE ── */
+  .expertise-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+    margin-top: 1rem;
+  }
+  .expertise-card {
+    background: var(--cream-dim);
+    border: 1px solid var(--divider);
+    border-radius: 4px;
+    padding: 1.75rem;
+    transition: border-color 0.2s, background 0.2s;
+  }
+  .expertise-card:hover {
+    border-color: var(--gold);
+    background: var(--gold-dim);
+  }
+  .exp-num {
+    font-family: var(--serif);
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--gold);
+    opacity: 0.6;
+    margin-bottom: 1rem;
+  }
+  .exp-title {
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--cream);
+    margin-bottom: 0.75rem;
+    line-height: 1.3;
+  }
+  .exp-desc {
+    font-size: 0.82rem;
+    color: var(--muted);
+    line-height: 1.65;
+  }
+
+  /* ── CLIENTS ── */
+  .clients-section { background: var(--navy-mid); border-top: 1px solid var(--divider); border-bottom: 1px solid var(--divider); }
+  .clients-intro {
+    font-size: 1rem;
+    color: var(--muted);
+    max-width: 620px;
+    margin-bottom: 3rem;
+    line-height: 1.7;
+  }
+  .clients-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1px;
+    border: 1px solid var(--divider);
+    overflow: hidden;
+    border-radius: 4px;
+  }
+  .client-cell {
+    padding: 2rem 1.5rem;
+    text-align: center;
+    border-right: 1px solid var(--divider);
+    border-bottom: 1px solid var(--divider);
+    background: var(--navy);
+    transition: background 0.2s;
+  }
+  .client-cell:hover { background: var(--gold-dim); }
+  .client-name {
+    font-family: var(--serif);
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--cream);
+    margin-bottom: 0.25rem;
+  }
+  .client-type {
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  /* ── CAREER ── */
+  .timeline { margin-top: 1rem; }
+  .timeline-item {
+    display: grid;
+    grid-template-columns: 160px 1fr;
+    gap: 2rem;
+    padding: 2.5rem 0;
+    border-bottom: 1px solid var(--divider);
+    position: relative;
+  }
+  .timeline-item:last-child { border-bottom: none; }
+  .tl-date {
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--gold);
+    padding-top: 0.25rem;
+  }
+  .tl-org {
+    font-size: 0.75rem;
+    color: var(--muted);
+    margin-top: 0.35rem;
+  }
+  .tl-role {
+    font-family: var(--serif);
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--cream);
+    margin-bottom: 0.5rem;
+  }
+  .tl-body { font-size: 0.88rem; color: var(--muted); line-height: 1.7; max-width: 580px; }
+  .tl-pill {
+    display: inline-block;
+    background: var(--gold-dim);
+    border: 1px solid var(--divider);
+    color: var(--gold);
+    font-size: 0.68rem;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 0.2rem 0.65rem;
+    border-radius: 2px;
+    margin: 0.75rem 0.25rem 0 0;
+  }
+
+  /* ── VENTURES ── */
+  .ventures-section { background: var(--navy-mid); border-top: 1px solid var(--divider); border-bottom: 1px solid var(--divider); }
+  .ventures-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+  }
+  .venture-card {
+    border: 1px solid var(--divider);
+    border-radius: 4px;
+    padding: 2.5rem;
+    background: var(--navy);
+    position: relative;
+    overflow: hidden;
+  }
+  .venture-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--gold), transparent);
+  }
+  .venture-title {
+    font-family: var(--serif);
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--cream);
+    margin-bottom: 0.4rem;
+  }
+  .venture-role {
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 1.25rem;
+  }
+  .venture-desc { font-size: 0.88rem; color: var(--muted); line-height: 1.7; }
+
+  /* ── CONTACT ── */
+  .contact-section {
+    text-align: center;
+    background:
+      radial-gradient(ellipse 70% 60% at 50% 100%, rgba(26,58,92,0.06) 0%, transparent 70%);
+  }
+  .contact-section h2 { margin-bottom: 1rem; }
+  .contact-sub {
+    font-size: 1rem;
+    color: var(--muted);
+    max-width: 480px;
+    margin: 0 auto 2.5rem;
+  }
+  .contact-links {
+    display: flex; justify-content: center; gap: 1.5rem; flex-wrap: wrap;
+  }
+  .contact-link {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    padding: 0.75rem 1.75rem;
+    border: 1px solid var(--divider);
+    border-radius: 2px;
+    color: var(--cream);
+    text-decoration: none;
+    font-size: 0.8rem;
+    font-weight: 400;
+    letter-spacing: 0.08em;
+    transition: border-color 0.2s, color 0.2s;
+  }
+  .contact-link:hover { border-color: var(--gold); color: var(--gold); }
+  .contact-link.primary {
+    background: var(--gold);
+    border-color: var(--gold);
+    color: var(--navy);
+    font-weight: 500;
+  }
+  .contact-link.primary:hover { background: var(--gold-light); border-color: var(--gold-light); }
+
+  /* ── FOOTER ── */
+  footer {
+    padding: 2rem 3rem;
+    border-top: 1px solid var(--divider);
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .footer-copy { font-size: 0.75rem; color: var(--muted); }
+  .footer-name { font-family: var(--serif); font-size: 1rem; color: var(--gold); }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .hero-eyebrow { animation: fadeUp 0.7s ease both; }
+  h1             { animation: fadeUp 0.7s 0.1s ease both; }
+  .hero-title    { animation: fadeUp 0.7s 0.2s ease both; }
+  .hero-stats    { animation: fadeUp 0.7s 0.35s ease both; }
+  .hero-cta      { animation: fadeUp 0.7s 0.45s ease both; }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 900px) {
+    nav { padding: 1rem 1.5rem; }
+    .nav-links { gap: 1.5rem; }
+    section { padding: 4rem 1.5rem; }
+    .about-grid { grid-template-columns: 1fr; gap: 2.5rem; }
+    .expertise-grid { grid-template-columns: 1fr 1fr; }
+    .clients-grid { grid-template-columns: repeat(2, 1fr); }
+    .ventures-grid { grid-template-columns: 1fr; }
+    .hero-stats { gap: 2rem; }
+    .timeline-item { grid-template-columns: 1fr; gap: 0.5rem; }
+  }
+  @media (max-width: 600px) {
+    .hero { padding: 6rem 1.5rem 3rem; }
+    .expertise-grid { grid-template-columns: 1fr; }
+    .nav-links { display: none; }
+    .hero-stats { flex-wrap: wrap; gap: 1.5rem; }
+    footer { flex-direction: column; gap: 0.5rem; text-align: center; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ── NAVIGATION ── -->
+<nav>
+  <div class="nav-logo">D. Teachey</div>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#expertise">Expertise</a></li>
+    <li><a href="#clients">Clients</a></li>
+    <li><a href="#career">Career</a></li>
+    <li><a href="#ventures">Ventures</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- ── HERO ── -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-rule"></div>
+  <div class="hero-content">
+    <div class="hero-eyebrow">SAP Business Transformation Practice Builder</div>
+    <h1>Doug<br><span class="accent">Teachey</span></h1>
+    <p class="hero-title">
+      Growth executive who builds high-performing businesses, drives enterprise revenue,
+      and transforms organizations through AI-powered learning and adoption.
+    </p>
+    <div class="hero-stats">
+      <div>
+        <div class="stat-num">$14M+</div>
+        <div class="stat-label">Annual Recurring Revenue Built</div>
+      </div>
+      <div>
+        <div class="stat-num">60+</div>
+        <div class="stat-label">Global Team Led</div>
+      </div>
+      <div>
+        <div class="stat-num">25+</div>
+        <div class="stat-label">Years Enterprise Transformation</div>
+      </div>
+    </div>
+    <a href="#contact" class="hero-cta">Let's Connect →</a>
+  </div>
+</section>
+
+<!-- ── ABOUT ── -->
+<section class="about-section" id="about">
+  <div class="section-inner">
+    <div class="section-label">About</div>
+    <div class="about-grid">
+      <div class="about-body">
+        <h2>SAP BTM.<br>Practice Builder.<br>Revenue Driver.</h2>
+        <p>
+          I'm a global partner and practice leader with <strong>25+ years of enterprise transformation experience</strong>,
+          specializing in large-scale ERP implementations (SAP, Oracle, Workday), digital adoption platforms,
+          and AI-powered learning ecosystems.
+        </p>
+        <p>
+          I built ISG's Training as a Service practice from the ground up — zero to a
+          <strong>$14M+ ARR business with a 60+ person global team</strong> — while simultaneously
+          developing software ventures and independent consulting capabilities.
+        </p>
+        <p>
+          I've personally delivered <strong>$4B+ in successful enterprise transformation projects</strong> — from leading the $15B Coca-Cola North American bottling refranchising to Fortune 500 ERP rollouts touching 75,000+ users across 30+ organizations.
+        </p>
+        <p>
+          My central thesis: <strong>technology only creates value when people adopt it.</strong>
+          That's the intersection where I've built my career — and the business case I make every time.
+        </p>
+      </div>
+      <div>
+        <div class="credentials">
+          <div class="cred-item">
+            <div class="cred-icon"></div>
+            <div>
+              <div class="cred-title">MBA — University of Georgia</div>
+              <div class="cred-sub">Terry College of Business</div>
+            </div>
+          </div>
+          <div class="cred-item">
+            <div class="cred-icon"></div>
+            <div>
+              <div class="cred-title">Global Partner — ISG</div>
+              <div class="cred-sub">Training as a Service (TaaS) Practice Leader</div>
+            </div>
+          </div>
+          <div class="cred-item">
+            <div class="cred-icon"></div>
+            <div>
+              <div class="cred-title">Co-Founder — Ascent Labs</div>
+              <div class="cred-sub">AI Software Company · ascentlabs.io</div>
+            </div>
+          </div>
+          <div class="cred-item">
+            <div class="cred-icon"></div>
+            <div>
+              <div class="cred-title">Founder — Change Advisors LLC</div>
+              <div class="cred-sub">OCM & Learning Consulting · est. 2019</div>
+            </div>
+          </div>
+          <div class="cred-item">
+            <div class="cred-icon"></div>
+            <div>
+              <div class="cred-title">Based in Atlanta, GA</div>
+              <div class="cred-sub">Available for National & Global Engagements</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── EXPERTISE ── -->
+<section id="expertise">
+  <div class="section-inner">
+    <div class="section-label">Expertise</div>
+    <h2>What I bring to your SAP BTM practice.</h2>
+    <div class="expertise-grid">
+      <div class="expertise-card">
+        <div class="exp-num">01</div>
+        <div class="exp-title">SAP Practice Building from Zero</div>
+        <div class="exp-desc">Built ISG&#x2019;s TaaS practice from ideation to $14M+ ARR — the firm&#x2019;s fastest-growing business. I know exactly what it takes to stand up a new consulting practice and make it win.</div>
+      </div>
+      <div class="expertise-card">
+        <div class="exp-num">02</div>
+        <div class="exp-title">SAP Business Transformation Management</div>
+        <div class="exp-desc">25+ years of BTM delivery across S/4HANA, SAP Financials, SAP International, SAP EAM Fiori, and SAP Enable Now. OCM, training, stakeholder strategy, and hypercare at enterprise scale.</div>
+      </div>
+      <div class="expertise-card">
+        <div class="exp-num">03</div>
+        <div class="exp-title">Organizational Change Management</div>
+        <div class="exp-desc">Executive OCM leadership for SAP programs affecting 75,000+ end-users across 30+ organizations. Readiness assessments, impact analysis, executive alignment, and sustainment.</div>
+      </div>
+      <div class="expertise-card">
+        <div class="exp-num">04</div>
+        <div class="exp-title">Digital Adoption & AI-Powered Learning</div>
+        <div class="exp-desc">SAP Enable Now, WalkMe, and Userlane strategy and deployment. AI-powered content development that reduces SME reliance by 50%+ and accelerates SAP go-lives.</div>
+      </div>
+      <div class="expertise-card">
+        <div class="exp-num">05</div>
+        <div class="exp-title">Enterprise Client Development</div>
+        <div class="exp-desc">Track record of closing and growing multimillion-dollar SAP engagements with Bank of America, Lockheed Martin, General Motors, Coca-Cola, and Home Depot.</div>
+      </div>
+      <div class="expertise-card">
+        <div class="exp-num">06</div>
+        <div class="exp-title">P&L Ownership & Team Leadership</div>
+        <div class="exp-desc">Full P&L responsibility for a 60+ person global team. Built recruiting pipelines, delivery models, COEs, and leadership structure (Director of Revenue, Delivery, and Operations).</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── CLIENTS ── -->
+<section class="clients-section" id="clients">
+  <div class="section-inner">
+    <div class="section-label">Client Portfolio</div>
+    <h2>Trusted by industry leaders.</h2>
+    <p class="clients-intro">
+      Over 25 years, I've led enterprise transformation engagements across manufacturing,
+      financial services, healthcare, aerospace, consumer goods, and energy — at a scale most
+      practitioners never reach.
+    </p>
+    <div class="clients-grid">
+      <div class="client-cell">
+        <div class="client-name">General Motors</div>
+        <div class="client-type">Manufacturing</div>
+      </div>
+      <div class="client-cell">
+        <div class="client-name">Bank of America</div>
+        <div class="client-type">Financial Services</div>
+      </div>
+      <div class="client-cell">
+        <div class="client-name">Lockheed Martin</div>
+        <div class="client-type">Aerospace & Defense</div>
+      </div>
+      <div class="client-cell">
+        <div class="client-name">Coca-Cola</div>
+        <div class="client-type">Consumer Goods</div>
+      </div>
+      <div class="client-cell">
+        <div class="client-name">Home Depot</div>
+        <div class="client-type">Retail</div>
+      </div>
+      <div class="client-cell">
+        <div class="client-name">Merck</div>
+        <div class="client-type">Pharmaceutical</div>
+      </div>
+      <div class="client-cell">
+        <div class="client-name">Delta Air Lines</div>
+        <div class="client-type">Aviation</div>
+      </div>
+      <div class="client-cell">
+        <div class="client-name">CHS Inc.</div>
+        <div class="client-type">Agricultural Energy</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── CAREER ── -->
+<section id="career">
+  <div class="section-inner">
+    <div class="section-label">Career</div>
+    <h2>A track record of building.</h2>
+    <div class="timeline">
+
+      <div class="timeline-item">
+        <div>
+          <div class="tl-date">2020 – Present</div>
+          <div class="tl-org">ISG (Information Services Group)</div>
+        </div>
+        <div>
+          <div class="tl-role">Global Partner — TaaS Practice Leader</div>
+          <div class="tl-body">
+            Built ISG's Training as a Service practice from zero to a $14M+ ARR business with a 60+ person global team and consistent year-over-year growth. Established delivery model, hired and developed three-director leadership structure (Revenue, Delivery, Operations), and built major account relationships including Bank of America, General Motors, Lockheed Martin, and CHS. Developed ISG's DAP practice and WalkMe GTM strategy.
+          </div>
+          <span class="tl-pill">Practice Builder</span>
+          <span class="tl-pill">P&L Owner</span>
+          <span class="tl-pill">$14M+ ARR</span>
+          <span class="tl-pill">60+ Team</span>
+        </div>
+      </div>
+
+      <div class="timeline-item">
+        <div>
+          <div class="tl-date">2019 – Present</div>
+          <div class="tl-org">Change Advisors LLC</div>
+        </div>
+        <div>
+          <div class="tl-role">Founder & Principal Consultant</div>
+          <div class="tl-body">
+            Founded independent OCM and learning consulting firm providing advisory services for large-scale enterprise transformation programs. Currently developing as a strategic consulting vehicle with focus on mid-market AI adoption and change management.
+          </div>
+          <span class="tl-pill">Founder</span>
+          <span class="tl-pill">OCM</span>
+          <span class="tl-pill">Learning Strategy</span>
+        </div>
+      </div>
+
+      <div class="timeline-item">
+        <div>
+          <div class="tl-date">Prior Roles</div>
+          <div class="tl-org">25+ Years Industry</div>
+        </div>
+        <div>
+          <div class="tl-role">Enterprise Transformation Executive</div>
+          <div class="tl-body">
+            25+ years of progressive leadership across ERP implementations (SAP, Oracle, Workday), OCM, training strategy, and digital adoption. Delivered engagements for some of the world's largest companies across manufacturing, financial services, healthcare, energy, and consumer goods sectors.
+          </div>
+          <span class="tl-pill">SAP</span>
+          <span class="tl-pill">Oracle</span>
+          <span class="tl-pill">Workday</span>
+          <span class="tl-pill">WalkMe</span>
+          <span class="tl-pill">Fortune 500</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ── VENTURES ── -->
+<section class="ventures-section" id="ventures">
+  <div class="section-inner">
+    <div class="section-label">Entrepreneurial Ventures</div>
+    <h2>Building beyond the day job.</h2>
+    <div class="ventures-grid">
+      <div class="venture-card">
+        <div class="venture-title">Ascent Labs</div>
+        <div class="venture-role">Co-Founder &amp; Board Member</div>
+        <div class="venture-desc">
+          AI software company building tools at the intersection of enterprise learning, organizational change, and intelligent adoption. Guided by values of Community, Stewardship, Curiosity, Human-Centric Solutions, and Purpose-Driven Innovation.
+          <br><br>
+          <a href="https://ascentlabs.io" style="color: var(--gold); text-decoration: none; font-size: 0.82rem; letter-spacing: 0.08em;">ascentlabs.io →</a>
+        </div>
+      </div>
+      <div class="venture-card">
+        <div class="venture-title">Change Advisors LLC</div>
+        <div class="venture-role">Founder &amp; Principal</div>
+        <div class="venture-desc">
+          Independent consulting firm specializing in organizational change management, enterprise learning strategy, and digital adoption for mid-market companies. Built as a strategic advisory vehicle for executives navigating major technology transformations.
+          <br><br>
+          <span style="color: var(--gold); font-size: 0.82rem; letter-spacing: 0.08em;">Atlanta, GA · est. 2019</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── CONTACT ── -->
+<section class="contact-section" id="contact">
+  <div class="section-inner">
+    <div class="section-label" style="text-align:center">Contact</div>
+    <h2>Let's build something together.</h2>
+    <p class="contact-sub">
+      I'm ready to build your SAP Business Transformation Management practice — bringing 25+ years of SAP delivery experience, a proven practice-building track record, and an existing network of enterprise relationships.
+    </p>
+    <div class="contact-links">
+      <a href="mailto:dteachey@gmail.com" class="contact-link primary">Email Me →</a>
+      <a href="https://linkedin.com/in/dougteachey" class="contact-link">LinkedIn</a>
+      <a href="https://ascentlabs.io" class="contact-link">Ascent Labs</a>
+    </div>
+  </div>
+</section>
+
+<!-- ── FOOTER ── -->
+<footer>
+  <div class="footer-name">Doug Teachey</div>
+  <div class="footer-copy">© 2026 · Atlanta, GA · MBA, University of Georgia</div>
+</footer>
+
+</body>
+</html>
